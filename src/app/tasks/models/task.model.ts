@@ -1,3 +1,12 @@
+export interface Task {
+  id?: number;
+  action?: string;
+  priority?: number;
+  estHours?: number;
+  actHours?: number;
+  done?: boolean;
+}
+
 export class TaskModel {
   constructor(
     public id: number = null,
