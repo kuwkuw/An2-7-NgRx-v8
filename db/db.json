@@ -28,13 +28,15 @@
       "id": 5,
       "action": "Build",
       "priority": 1,
-      "estHours": 4
+      "estHours": 4,
+      "done": true
     },
     {
       "id": 6,
       "action": "Deploy",
       "priority": 2,
-      "estHours": 8
+      "estHours": 8,
+      "done": true
     }
   ],
   "users": [

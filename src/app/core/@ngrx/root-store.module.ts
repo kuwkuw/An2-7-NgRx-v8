@@ -10,24 +10,38 @@ import { EffectsModule } from '@ngrx/effects';
 import { TasksStoreModule } from './tasks/tasks-store.module';
 import { metaReducers } from './meta-reducers';
 
+import { StoreRouterConnectingModule, RouterState } from '@ngrx/router-store';
+import { routerReducers, CustomSerializer, RouterEffects } from './router';
+import { UsersStoreModule } from './users/users-store.module';
+
 
 @NgModule({
   declarations: [],
   imports: [
-    // Instrumentation must be imported after importing StoreModule (config is optional)
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
     CommonModule,
-    StoreModule.forRoot({}, {
+    StoreModule.forRoot(routerReducers, {
       metaReducers,
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,
+        // router state is not serializable
+        // set false if you don't use CustomSerializer
         strictStateSerializability: true,
-        strictActionSerializability: true
+        // router action is not serializable
+        // set false
+        strictActionSerializability: false
       }
     }),
-    EffectsModule.forRoot([]),
+    // Instrumentation must be imported after importing StoreModule (config is optional)
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    StoreRouterConnectingModule.forRoot({
+      stateKey: 'router',
+      routerState: RouterState.Minimal,
+      serializer: CustomSerializer // has a priority over routerState
+    }),
+    EffectsModule.forRoot([RouterEffects]),
     TasksStoreModule,
+    UsersStoreModule,
 
   ]
 })
